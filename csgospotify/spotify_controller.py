@@ -6,8 +6,6 @@ from urllib import parse
 import json
 
 # Inspired by http://cgbystrom.com/articles/deconstructing-spotifys-builtin-http-server/
-# TODO: Scan for spotify port
-
 ORIGIN_HEADER = {'Origin': 'https://open.spotify.com'}
 
 class SpotifyController(object):
