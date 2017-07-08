@@ -1,12 +1,14 @@
 from urllib.request import urlopen, Request
-from urllib.error import HTTPError 
+from urllib.error import URLError
 from string import ascii_lowercase
 from random import choice
 from urllib import parse
 import json
 
-# Inspired by http://cgbystrom.com/articles/deconstructing-spotifys-builtin-http-server/
+# Inspired by
+# http://cgbystrom.com/articles/deconstructing-spotifys-builtin-http-server/
 ORIGIN_HEADER = {'Origin': 'https://open.spotify.com'}
+
 
 class SpotifyController(object):
 
@@ -16,11 +18,13 @@ class SpotifyController(object):
         self.csrf_token = self.get_csrf_token()
 
     def get_port(self):
+        print("Connecting to Spotify...")
         for self.port in range(4370, 4380):
             try:
                 response = self.get_version()
-                return 
-            except Exception as e:
+                print("Spotify: " + response['client_version'])
+                return
+            except URLError as e:
                 self.port += 1
 
         raise RuntimeError("Could not find Spotify port. Is Spotify running?")
@@ -44,7 +48,8 @@ class SpotifyController(object):
 
     def get_csrf_token(self):
         # Requires Origin header to be set to generate the CSRF token.
-        res = self.get_json(self.get_url('/simplecsrf/token.json'), headers=ORIGIN_HEADER)
+        res = self.get_json(self.get_url(
+            '/simplecsrf/token.json'), headers=ORIGIN_HEADER)
         if 'error' in res:
             raise RuntimeError('Spotify: ' + res['error']['message'])
         return res['token']
@@ -77,7 +82,7 @@ class SpotifyController(object):
     def play(spotify_uri):
         params = {
             'oauth': self.oauth_token,
-            'csrf': self.csrf_token, 
+            'csrf': self.csrf_token,
             'uri': spotify_uri,
             'context': spotify_uri,
         }

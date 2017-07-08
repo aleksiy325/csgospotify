@@ -1,5 +1,9 @@
 from csgo_state import GameStateServer, GameStateRequestHandler
+from winreg import ConnectRegistry, OpenKey, QueryValueEx, HKEY_CURRENT_USER
 import time
+import sys
+
+# TODO: auto insert config
 
 if __name__ == '__main__':
     server = GameStateServer(('localhost', 3000), GameStateRequestHandler)

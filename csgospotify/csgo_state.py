@@ -42,7 +42,6 @@ class GameStateRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         length = int(self.headers['Content-Length'])
         body = self.rfile.read(length).decode('utf-8')
-        print(body)
         game_state = GameState(body)
         self.control_music(game_state)
         self.send_header('Content-type', 'text/html')
